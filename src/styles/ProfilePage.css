@@ -1,0 +1,19 @@
+.center_Profile{
+    flex-direction: column;
+    grid-template-columns: 25% 25% 25%;
+    justify-content: center;
+    width: 900px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+.profileBox{
+    border: none;
+    padding: 10px;
+    background-color: white;
+    display: flex;
+    color: black;
+    align-items: center;
+    cursor: pointer;
+    margin-top: 10%;
+  }

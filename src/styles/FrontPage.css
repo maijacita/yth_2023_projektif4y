@@ -1,0 +1,73 @@
+body {
+  max-height: 100vh;
+  overflow-y: scroll;
+}
+  .center_Front{
+    flex-direction: column;
+    grid-template-columns: 25% 25% 25%;
+    justify-content: center;
+    width: 900px;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top: 2%;
+  }
+
+  .postbox{
+    border: none;
+    padding: 10px;
+    background-color: white;
+    display: column;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    border-radius: 20px;
+  }
+
+  .Information{
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+.postTextTitle { 
+    text-align: left;
+    font-size: 40px;
+    font-family: 'Monsterrat', sans-serif;
+}
+
+.postTextCategory { 
+  text-align: center;
+  font-size: 15px;
+  font-family: 'Monsterrat', sans-serif;
+  border-radius: 15px;
+  width: 10%;
+}
+
+.postTextBody { 
+  text-align: left;
+  font-size: 20px;
+  font-family: 'Monsterrat', sans-serif;
+}
+
+.blue-text {
+  background-color: aqua;
+}
+
+.pink-text {
+  background-color: rgb(240, 11, 87);
+}
+
+.orange-text {
+  background-color: orange;
+}
+
+.green-text {
+  background-color: greenyellow;
+}
+
+.brown-text {
+  background-color: rgb(240, 122, 122);
+}
+
+.lila-text {
+  background-color: rgb(255, 0, 255);
+}
