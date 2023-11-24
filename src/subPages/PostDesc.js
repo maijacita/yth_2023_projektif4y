@@ -4,8 +4,9 @@ import {firestore, where, onSnapshot, query, collection, POSTS, COMMENTS, getDoc
 import '../styles/FrontPage.css'
 import NavBar from "../components/navbar";
 import CommentPost from "../components/commentPost";
+import SaveFavourite from "../components/saveFavourite";
 
-const PostDescription = () => {
+const PostDescription = ({ title, body }) => {
 
     const [posts, setPosts] = useState([]);
     const {postId} = useParams();
@@ -70,6 +71,7 @@ const PostDescription = () => {
         <NavBar/>
         <div className="center_Front">
         <div className="postbox">
+          <SaveFavourite postId={postId} title={title} body={body}/>
           {posts.length === 0 ? (
             <p>Loading...</p>
           ) : (

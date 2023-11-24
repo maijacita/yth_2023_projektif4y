@@ -1,8 +1,7 @@
 import React, {useState, useEffect} from "react";
-import { useNavigate } from "react-router-dom";
 import "../styles/FrontPage.css"
 import '../styles/PopupMenu.css'
-import { getAuth, where, collection, firestore, POSTS, addDoc, doc, USERS, onSnapshot, query, getDocs, serverTimestamp, updateDoc } from "../Firebase";
+import { getAuth, where, collection, firestore, POSTS, addDoc, USERS, onSnapshot, query, serverTimestamp} from "../Firebase";
 
 const CreatePosts = () => {
 
@@ -10,7 +9,6 @@ const CreatePosts = () => {
     const [body, setBody] = useState("");
     const [school_category, setSchool_category] = useState("");
     const auth = getAuth()
-    const navigate = useNavigate();
     const [user, setUser] = useState("");
 
     useEffect(() => {
@@ -35,8 +33,16 @@ const CreatePosts = () => {
 
 
     const HandleSubmit = async (e) => {
-        e.preventDefault();  
-        try {
+        e.preventDefault();
+        if (school_category.trim() === "") {
+          alert("Please select a category.");
+
+        } else if (title.trim() === "" || body.trim() === "") {
+          alert("Title and body are required fields.");
+
+        } else {
+
+            try {
             const timestamp = serverTimestamp();
             const docRef = await addDoc(collection(firestore, POSTS), {
               title: title,
@@ -46,12 +52,18 @@ const CreatePosts = () => {
               poster: user
             });
             console.log("Document written with ID: ", docRef.id);
-            navigate("/Home")
-            
+            setTitle("");
+            setBody("");
+            setSchool_category("");
           } catch (e) {
             console.error("Error adding document: ", e);
           }
+        }
     }
+
+    const handleCategoryChange = (e) => {
+      setSchool_category(e.target.value); // Update category state when a new option is selected
+  };
 
     return (
         <div className="postbox">
@@ -59,15 +71,16 @@ const CreatePosts = () => {
             <form onSubmit={HandleSubmit}>
                 <h3 value={user} onChange={(e) => setUser(e.target.value)}>{user.email}</h3>
                     <div className="txt_field">
-                        <input type="title" placeholder="What's the topic title?" value={title} onChange={(e) => setTitle(e.target.value)}></input>
+                        <input type="title" placeholder="What's the topic title?" value={title} onChange={(e) => setTitle(e.target.value)} required></input>
                             <span></span>
                     </div>
                     <div className="txt_field">
-                        <input type="body" placeholder="Write the text..." value={body} onChange={(e) => setBody(e.target.value)}></input>
+                        <input type="body" placeholder="Write the text..." value={body} onChange={(e) => setBody(e.target.value)} required></input>
                             <span></span>
                     </div>
         <p> Select one from the given options:
-		<select id="select1" value={school_category} onChange={(e) => setSchool_category(e.target.value)}>
+		<select id="select1" value={school_category} onChange={handleCategoryChange}>
+      <option value="" disabled>Select an option</option>
 			<option value="Projects">Projects</option>
 			<option value="Courses">Courses</option>
 			<option value="Job and internship">Job and internship</option>

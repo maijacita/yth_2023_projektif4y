@@ -17,3 +17,10 @@
     cursor: pointer;
     margin-top: 10%;
   }
+
+  .yf_img{
+    position: relative;
+    justify-content: center;
+    width: 20vw;
+    margin-left: 25%;
+  }

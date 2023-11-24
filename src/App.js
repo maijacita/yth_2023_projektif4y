@@ -8,6 +8,7 @@ import PostDescription from "./subPages/PostDesc";
 import PosterProfile from "./subPages/posterProfile";
 import ResetPassword from "./components/resetPw";
 import DeleteUser from "./components/deleteUser";
+import FavouritesPage from "./subPages/favouritesPage";
 
 function App() {
 
@@ -31,6 +32,8 @@ function App() {
     <Route path="/ResetPassword" element={ <ResetPassword/>}/>
 
     <Route path="/DeleteUser" element={ <DeleteUser/>}/>
+
+    <Route path="/YourFavourites" element={ <FavouritesPage/>}/>
     
     </Routes>
     </div>

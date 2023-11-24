@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import '../styles/LoginPage.css'
 import Image from "../f4f_logo.jpg"
 import { Link, useNavigate } from "react-router-dom";
-import { getAuth, createUserWithEmailAndPassword, collection, doc, firestore, USERS, setDoc, addDoc } from "../Firebase";
+import { getAuth, createUserWithEmailAndPassword, collection, firestore, USERS, addDoc } from "../Firebase";
 
 const Register = () => {
     const [email, setEmail] = useState("")
@@ -29,18 +29,22 @@ const Register = () => {
     const registerNewUser = async(e) => {
         const auth = getAuth()
         e.preventDefault();
-        const docRef = await addDoc(collection(firestore, USERS), {
+        if (isValidEmail && isValidPassword) {
+            try {
+            const docRef = await addDoc(collection(firestore, USERS), {
             email: email,
             first_name: first_name,
             last_name: last_name
           })
-        .then(() => {
-            createUserWithEmailAndPassword(auth, email, password)
-            navigate("/")
-		}).catch((error) => {
-            console.log(error);
-        });
+            await createUserWithEmailAndPassword(auth, email, password);
+            navigate("/");
+            } catch (error) {
+                console.log(error);
+                }
+        } else {
+        // Notify user about invalid email or password
     }
+};
 
     const handleInputChange = (event) => {
         const { value } = event.target;
@@ -85,7 +89,7 @@ const Register = () => {
                             {isValidPassword && <p>Password is valid!</p>}
                         </div>
 
-                        <button className="Login_button" onClick={(registerNewUser)}>Create account</button>
+                        <button className="Login_button" type="submit">Create account</button>
                     </form>
 
                         <div class="signup_link">
