@@ -34,7 +34,8 @@ const Register = () => {
             const docRef = await addDoc(collection(firestore, USERS), {
             email: email,
             first_name: first_name,
-            last_name: last_name
+            last_name: last_name,
+            roles:["regUser"]
           })
             await createUserWithEmailAndPassword(auth, email, password);
             navigate("/");

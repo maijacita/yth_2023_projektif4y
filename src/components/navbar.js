@@ -6,6 +6,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import PopupMenu from "./popupMenu";
 import GridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
 import SearchPosts from './search.js'
+import ManagementBtn from "./managementBtn.js";
 
 const NavBar = () => {
 
@@ -25,6 +26,8 @@ const NavBar = () => {
             <img className="f4f_img" src={Image} alt="Forum4You"></img></Link>
 
             <SearchPosts/>
+
+            <ManagementBtn/>
 
 
         <div className="nav_Right">
