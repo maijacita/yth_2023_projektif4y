@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "../components/navbar";
-import { Link, useNavigate } from "react-router-dom";
-import {firestore, deleteDoc, doc,getAuth,collection,onSnapshot,query,where, USERS, POSTS, getDocs, sendPasswordResetEmail, deleteUser} from '../Firebase'
+import { Link } from "react-router-dom";
+import {firestore, getAuth,collection, query,where, USERS, POSTS, getDocs} from '../Firebase'
 import "../styles/ProfilePage.css"
+import ChangePasswordModal from "../components/changePwModal";
 
 const Profile = () => {
 
     const auth = getAuth()
     const [user, setUser] = useState([])
     const [posts, setPosts] = useState([]);
-    const navigate = useNavigate();
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
 
     useEffect(() => {
       const fetchUserDataAndPosts = async () => {
@@ -66,7 +69,13 @@ const Profile = () => {
                       <p>{auth.currentUser.email}</p>
                       <p>{auth.currentUser.uid}</p>
                       <p>{data.id}</p>
-                      <Link to="/ResetPassword"><p>Change password</p></Link>
+
+                      <button onClick={openModal}>Change Password</button>
+                      <ChangePasswordModal
+                      isOpen={isModalOpen}
+                      onRequestClose={closeModal}
+                      />
+
                       <Link to="/DeleteUser"><p>Delete user</p></Link>
                       </div>)})}
                       
