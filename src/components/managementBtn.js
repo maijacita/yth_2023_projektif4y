@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getAuth, collection, firestore, query, where, onSnapshot, USERS } from "../Firebase";
+import { Link } from 'react-router-dom';
+import TicketQ from '../adminPanel/ticketQ';
 
 const ManagementBtn = () => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -31,7 +33,8 @@ const ManagementBtn = () => {
   return (
     <div>
       {isAdmin && ( // Check if the current user has the 'admin' role
-        <button>Show Admin Button</button>
+      <Link to="/TicketQueue">
+        <button>Show Admin Button</button></Link>
       )}
     </div>
   );

@@ -5,6 +5,7 @@ import '../styles/FrontPage.css'
 import NavBar from "../components/navbar";
 import CommentPost from "../components/commentPost";
 import SaveFavourite from "../components/saveFavourite";
+import ReportBtn from "../components/reportBtn";
 
 const PostDescription = ({ title, body }) => {
 
@@ -12,6 +13,11 @@ const PostDescription = ({ title, body }) => {
     const {postId} = useParams();
     const [comments, setComments] = useState([]);
     const auth = getAuth();
+    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+
+    const handleReportClick = () => {
+      setIsReportModalOpen(true);
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -63,15 +69,28 @@ const PostDescription = ({ title, body }) => {
         return () => {
           queryPostComments()
         }
-      }, [])
+      }, [postId])
 
 
       return (
         <div className="body">
+
         <NavBar/>
+
         <div className="center_Front">
         <div className="postbox">
+
           <SaveFavourite postId={postId} title={title} body={body}/>
+
+        <div>
+        <ReportBtn
+          onClick={handleReportClick}
+          isOpen={isReportModalOpen}
+          onRequestClose={() => setIsReportModalOpen(false)}
+          incidentId={postId}
+          incidentType="post"/>
+        </div>
+
           {posts.length === 0 ? (
             <p>Loading...</p>
           ) : (

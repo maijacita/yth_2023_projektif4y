@@ -26,26 +26,32 @@ const Register = () => {
       };
 
 
-    const registerNewUser = async(e) => {
-        const auth = getAuth()
+      const registerNewUser = async (e) => {
+        const auth = getAuth();
         e.preventDefault();
         if (isValidEmail && isValidPassword) {
             try {
-            const docRef = await addDoc(collection(firestore, USERS), {
-            email: email,
-            first_name: first_name,
-            last_name: last_name,
-            roles:["regUser"]
-          })
-            await createUserWithEmailAndPassword(auth, email, password);
-            navigate("/");
+                await createUserWithEmailAndPassword(auth, email, password);
+                const user = auth.currentUser;
+
+                if (user) {
+                    await addDoc(collection(firestore, USERS), {
+                        email: email,
+                        first_name: first_name,
+                        last_name: last_name,
+                        roles: ["regUser"],
+                        uid: user.uid
+                    });
+                }
+
+                navigate("/");
             } catch (error) {
                 console.log(error);
-                }
+            }
         } else {
-        // Notify user about invalid email or password
-    }
-};
+            // Notify user about invalid email or password
+        }
+    };
 
     const handleInputChange = (event) => {
         const { value } = event.target;

@@ -7,8 +7,6 @@ import SortByTime from "./sortByTime";
 const Post = () => {
 
     const [posts, setPosts] = useState([]) // array for posts
-    const { postId } = useParams();
-    console.log('postId:', postId);
 
     useEffect(() => {
         const q = query(collection(firestore,POSTS)) 

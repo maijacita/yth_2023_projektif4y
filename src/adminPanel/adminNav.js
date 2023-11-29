@@ -3,12 +3,10 @@ import '../styles/navBar.css'
 import Image from "../f4f.jpg"
 import { Link } from "react-router-dom";
 import SearchIcon from '@mui/icons-material/Search';
-import PopupMenu from "./popupMenu";
 import GridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
-import SearchPosts from './search.js'
-import ManagementBtn from "./managementBtn.js";
+import AdminMenu from "./adminMenu";
 
-const NavBar = () => {
+const AdminNav = () => {
 
     const [isDropdownVisible, setDropdownVisible] = useState(false);
 
@@ -24,24 +22,16 @@ const NavBar = () => {
         <div className="searchBarContainer">
             <Link to="/Home">
             <img className="f4f_img" src={Image} alt="Forum4You"></img></Link>
-
-            <SearchPosts/>
-            
-            <ManagementBtn/>
-
-
-        <div className="nav_Right">
             <div
             className="menu"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}>
                 <button><GridViewOutlinedIcon fontSize="large"/></button>
-          {isDropdownVisible && <PopupMenu />}
+          {isDropdownVisible && <AdminMenu />}
             </div>
-        </div>
 
      </div>
     )
 }
 
-export default NavBar
+export default AdminNav
