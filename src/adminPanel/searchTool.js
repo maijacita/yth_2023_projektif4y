@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AdminNav from "./adminNav";
+import { Link } from "react-router-dom";
 import {firestore, collection, POSTS, USERS, COMMENTS, getDocs} from '../Firebase'
 
 
@@ -109,6 +110,7 @@ const SearchTool = () => {
                                 <li key={item.id}>
                                     {searchType === 'posts' && (
                                         <div>
+                                            <Link to={`/ManagePost/${item.id}`}>
                                             <p>ID: {item.id}</p>
                                             <p>Title: {item.title}</p>
                                             <p>School Category: {item.school_category}</p>
@@ -125,11 +127,12 @@ const SearchTool = () => {
                                             <p>Poster: 
                                             {item.poster && Array.isArray(item.poster) && item.poster.length > 0
                                             ? item.poster[0].email
-                                            : 'Poster Profile Unavailable'}</p>
+                                            : 'Poster Profile Unavailable'}</p></Link>
                                         </div>
                                     )}
                                     {searchType === 'comments' && (
                                         <div>
+                                            <Link to={`/ManageComment/${item.id}`}>
                                             <p>ID: {item.id}</p>
                                             <p>Comment: {item.comment}</p>
                                             <p>Timestamp: {new Date(item.timestamp).toLocaleDateString({
@@ -143,7 +146,7 @@ const SearchTool = () => {
                                             })}</p>
                                             <p>Commenter:  {item.commenter && Array.isArray(item.commenter) && item.commenter.length > 0
                                             ? item.commenter[0].email
-                                            : ''}</p>
+                                            : ''}</p></Link>
                                         </div>
                                     )}
                                     {searchType === 'users' && (

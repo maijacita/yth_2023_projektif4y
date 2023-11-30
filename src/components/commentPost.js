@@ -20,7 +20,8 @@ const CommentPost = () => {
               id: doc.id,
               first_name: doc.data().first_name,
               last_name: doc.data().last_name,
-              email: doc.data().email
+              email: doc.data().email,
+              uid: doc.data().uid
             }
             tempArray.push(usersObject) // push object into temporary array
           })

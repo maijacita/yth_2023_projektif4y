@@ -21,7 +21,8 @@ const  DeleteUser = () => {
                 id: doc.id,
                 first_name: doc.data().first_name,
                 last_name: doc.data().last_name,
-                email: doc.data().email
+                email: doc.data().email,
+                uid: doc.data().uid
             }
             tempArray.push(usersObject) // push object into temporary array
           })
@@ -34,23 +35,16 @@ const  DeleteUser = () => {
 
       const handleDeleteUser = async (e) => {
         e.preventDefault();
-    
-        // Check if the password is correct (Optional)
-        // Ensure the password validation logic is added here
-    
         try {
             // Find the document in 'USERS' collection based on the current user's email
-            const q = query(collection(firestore, 'USERS'), where('email', '==', auth.currentUser.email));
+            const q = query(collection(firestore, USERS), where('uid', '==', auth.currentUser.uid));
             const querySnapshot = await getDocs(q);
-
-            // Assuming there's only one document with the current user's email, delete it
+            
             querySnapshot.forEach(async (doc) => {
                 await deleteDoc(doc.ref);
             });
-
             // Delete the user from Authentication
             await deleteUser(user);
-
             // Redirect after successful deletion
             navigate("/");
         } catch (error) {

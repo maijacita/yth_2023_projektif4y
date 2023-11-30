@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import {firestore, where, onSnapshot, query, collection, POSTS, COMMENTS, getDocs, getAuth } from '../Firebase'
+import { Link, useParams, useNavigate } from "react-router-dom";
+import {firestore, where, onSnapshot, query, collection, POSTS, COMMENTS, getDocs, getAuth, doc, deleteDoc } from '../Firebase'
 import '../styles/FrontPage.css'
 import NavBar from "../components/navbar";
 import CommentPost from "../components/commentPost";
@@ -14,6 +14,8 @@ const PostDescription = ({ title, body }) => {
     const [comments, setComments] = useState([]);
     const auth = getAuth();
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+    const currentUser = auth.currentUser
+    const navigate = useNavigate()
 
     const handleReportClick = () => {
       setIsReportModalOpen(true);
@@ -71,6 +73,24 @@ const PostDescription = ({ title, body }) => {
         }
       }, [postId])
 
+      const deletePost = async (postId) => {
+        try {
+          await deleteDoc(doc(firestore, POSTS, postId));
+          console.log("Post deleted successfully");
+          navigate("/Home") // Redirect
+        } catch (error) {
+          console.error("Error deleting post:", error);
+        }
+      };
+
+      const deleteComment = async (commentId) => {
+        try {
+          await deleteDoc(doc(firestore, COMMENTS, commentId));
+          console.log("Comment deleted successfully");
+        } catch (error) {
+          console.error("Error deleting comment:", error);
+        }
+      };
 
       return (
         <div className="body">
@@ -97,6 +117,12 @@ const PostDescription = ({ title, body }) => {
             posts.map(function (data) {
               return (
                 <div>
+              <div>
+              {currentUser &&
+                currentUser.uid === data.poster[0].uid && (
+                  <button onClick={() => deletePost(data.id)}>Delete Post</button>
+                )}</div>
+
                     <h2 className="postTextTitle">{data.title}</h2>
 
                     <Link to={data.poster && Array.isArray(data.poster) && data.poster.length > 0 ? `/PosterProfile/${data.poster[0].id}` : '#'}>
@@ -147,6 +173,14 @@ const PostDescription = ({ title, body }) => {
           
           {comments.map(comments => (
             <div>
+              <div>
+              {currentUser &&
+              currentUser.uid === comments.commenter[0].uid && (
+              <button onClick={() => deleteComment(comments.id)}>
+                Delete Comment
+              </button>
+            )}
+            </div>
 
         <div>
             <ReportBtn

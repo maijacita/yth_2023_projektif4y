@@ -13,6 +13,8 @@ import TicketQ from "./adminPanel/ticketQ";
 import TicketDesc from "./adminPanel/ticketDesc";
 import ResolvedTickets from "./adminPanel/resolvedTickets";
 import SearchTool from "./adminPanel/searchTool";
+import ManagePost from "./adminPanel/managePost";
+import ManageComment from "./adminPanel/manageComment";
 
 function App() {
 
@@ -46,6 +48,10 @@ function App() {
     <Route path="/ResolvedTickets" element={ <ResolvedTickets/> }/>
 
     <Route path="/SearchTool" element={ <SearchTool/> }/>
+
+    <Route path="/ManagePost/:postId" element={ <ManagePost/>}/>
+
+    <Route path="/ManageComment/:commentId" element={ <ManageComment/>}/>
     
     </Routes>
     </div>
