@@ -12,6 +12,7 @@ import FavouritesPage from "./subPages/favouritesPage";
 import TicketQ from "./adminPanel/ticketQ";
 import TicketDesc from "./adminPanel/ticketDesc";
 import ResolvedTickets from "./adminPanel/resolvedTickets";
+import SearchTool from "./adminPanel/searchTool";
 
 function App() {
 
@@ -43,6 +44,8 @@ function App() {
     <Route path="/Ticket/:ticketId" element={ <TicketDesc/> }/>
 
     <Route path="/ResolvedTickets" element={ <ResolvedTickets/> }/>
+
+    <Route path="/SearchTool" element={ <SearchTool/> }/>
     
     </Routes>
     </div>

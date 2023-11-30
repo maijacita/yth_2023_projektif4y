@@ -34,6 +34,7 @@ const TicketQ = () => {
     return (
         <div className="body">
             <AdminNav/>
+            <div className="center_Front">
             <div className="postbox">
                 <h1>Admin panel</h1>
                 {tickets.map(ticket => (
@@ -57,6 +58,7 @@ const TicketQ = () => {
                 ))}
             </div>
         </div>
+    </div>
     )
 }
 

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import '../styles/PopupMenu.css'
 import { getAuth, signOut } from '../Firebase'
@@ -18,12 +18,19 @@ const AdminMenu = () => {
     });
   }
 
+  const searchToolClick = () => {
+    navigate("/SearchTool")
+  }
+
+  const resolvedTicketsClick = () => {
+    navigate("/ResolvedTickets")
+  }
+
     return (
         <div className="dropdown-menu">
           <ul>
-            <Link to={"/ResolvedTickets"}>
-              Resolved Tickets
-            </Link>
+            <li onClick={resolvedTicketsClick}>Resolved Tickets</li>
+            <li onClick={searchToolClick}>Search</li>
              <li onClick={handleLogout}>Logout</li>
           </ul>
         </div>

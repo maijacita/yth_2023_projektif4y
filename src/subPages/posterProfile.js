@@ -3,6 +3,7 @@ import NavBar from "../components/navbar";
 import { Link, useParams } from "react-router-dom";
 import {firestore, collection, query, where, USERS, POSTS, getDocs} from '../Firebase'
 import "../styles/ProfilePage.css"
+import ReportBtn from "../components/reportBtn";
 
 const PosterProfile = () => {
 
@@ -10,6 +11,11 @@ const PosterProfile = () => {
     const {userProfileId} = useParams();
     console.log('users email:', userProfileId);
     const [posts, setPosts] = useState([]);
+    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+
+    const handleReportClick = () => {
+      setIsReportModalOpen(true);
+    };
 
       useEffect(() => {
         const fetchUserDataAndPosts = async () => {
@@ -65,6 +71,14 @@ const PosterProfile = () => {
           ) : (user.map(function(data) {
                         return (
                      <div>
+            <div>
+            <ReportBtn
+              onClick={handleReportClick}
+              isOpen={isReportModalOpen}
+              onRequestClose={() => setIsReportModalOpen(false)}
+              incidentId={data.id}
+              incidentType="user"/>
+            </div>
                       <h1>{data.first_name} {data.last_name}</h1>
                       <p>{userProfileId}</p>
                       <p>{data.email}</p>

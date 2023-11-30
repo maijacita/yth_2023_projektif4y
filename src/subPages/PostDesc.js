@@ -144,8 +144,19 @@ const PostDescription = ({ title, body }) => {
         
 
         <div className="postbox">
+          
           {comments.map(comments => (
             <div>
+
+        <div>
+            <ReportBtn
+              onClick={handleReportClick}
+              isOpen={isReportModalOpen}
+              onRequestClose={() => setIsReportModalOpen(false)}
+              incidentId={comments.id}
+              incidentType="comment"/>
+        </div>
+
             <h3 className="postTextBody">
               {new Date(comments.timestamp).toLocaleDateString({
                     year: 'numeric',
