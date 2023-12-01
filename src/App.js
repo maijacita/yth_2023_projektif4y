@@ -15,6 +15,7 @@ import ResolvedTickets from "./adminPanel/resolvedTickets";
 import SearchTool from "./adminPanel/searchTool";
 import ManagePost from "./adminPanel/managePost";
 import ManageComment from "./adminPanel/manageComment";
+import AdminCreateUser from "./adminPanel/adminCreateUser";
 
 function App() {
 
@@ -52,6 +53,8 @@ function App() {
     <Route path="/ManagePost/:postId" element={ <ManagePost/>}/>
 
     <Route path="/ManageComment/:commentId" element={ <ManageComment/>}/>
+
+    <Route path="/AdminCreateUser" element={ <AdminCreateUser/> }/>
     
     </Routes>
     </div>

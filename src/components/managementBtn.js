@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getAuth, collection, firestore, query, where, onSnapshot, USERS } from "../Firebase";
 import { Link } from 'react-router-dom';
-import TicketQ from '../adminPanel/ticketQ';
 
 const ManagementBtn = () => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -11,7 +10,7 @@ const ManagementBtn = () => {
   useEffect(() => {
     if (currentUser) {
       const usersRef = collection(firestore, USERS);
-      const q = query(usersRef, where('email','==', auth.currentUser.email));
+      const q = query(usersRef, where('uid','==', auth.currentUser.uid));
 
       const queryUser = onSnapshot(q, (querySnapshot) => {
         querySnapshot.forEach((doc) => {
@@ -34,7 +33,7 @@ const ManagementBtn = () => {
     <div>
       {isAdmin && ( // Check if the current user has the 'admin' role
       <Link to="/TicketQueue">
-        <button>Show Admin Button</button></Link>
+        <button>Admin Panel</button></Link>
       )}
     </div>
   );
