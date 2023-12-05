@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import AdminNav from "./adminNav";
-import { firestore, doc, updateDoc, collection, query, getDoc, TICKETS } from '../Firebase';
+import { firestore, doc, updateDoc, getDoc, TICKETS, getAuth } from '../Firebase';
 import { useParams } from "react-router-dom";
+import checkAdminStatus from "../utils/isAdminFunction";
 
 const TicketDesc = () => {
     const [ticket, setTicket] = useState(null);
@@ -9,8 +10,26 @@ const TicketDesc = () => {
     const [incidentState, setIncidentState] = useState('');
     const [closureInfo, setClosureInfo] = useState('');
     const { ticketId } = useParams();
+    const [isAdmin, setIsAdmin] = useState(false);
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
 
     useEffect(() => {
+        const fetchAdminStatus = async () => {
+            const adminStatus = await checkAdminStatus(currentUser);
+            setIsAdmin(adminStatus);
+        };
+        if (currentUser) {
+            fetchAdminStatus();
+        }
+        return () => {
+        };
+    }, [currentUser]);
+
+    useEffect(() => {
+        if (!isAdmin) {
+            return; // Don't fetch tickets if user is not an admin
+        }
         const fetchTicket = async () => {
             try {
                 const ticketRef = doc(firestore, TICKETS, ticketId);
@@ -30,7 +49,7 @@ const TicketDesc = () => {
             }
         };
         fetchTicket();
-    }, [ticketId]);
+    }, [ticketId, isAdmin]);
 
     const updateTicketStatus = async (newStatus, closureInfo) => {
         try {
@@ -69,9 +88,13 @@ const TicketDesc = () => {
         }
     };
 
+    if (!isAdmin) {
+        return <div>You do not have permission to view this page.</div>;
+    }
+
     return (
         <div className="body">
-            <AdminNav />
+            {isAdmin && <AdminNav />}
             <div className="postbox">
                 <h1>Ticket Description</h1>
                 <div>

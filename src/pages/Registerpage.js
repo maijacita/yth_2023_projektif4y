@@ -1,8 +1,8 @@
-import React, {useState} from "react";
-import '../styles/LoginPage.css'
-import Image from "../f4f_logo.jpg"
+import React, { useState } from "react";
+import '../styles/LoginPage.css';
+import Image from "../f4f_logo.jpg";
 import { Link, useNavigate } from "react-router-dom";
-import { getAuth, createUserWithEmailAndPassword, collection, firestore, USERS, addDoc } from "../Firebase";
+import { getAuth, createUserWithEmailAndPassword, collection, USERS, firestore, setDoc, doc } from "../Firebase";
 import { validatePassword } from '../utils/passwordValidator';
 import { validateEmail } from "../utils/emailValidator";
 
@@ -38,18 +38,15 @@ const Register = () => {
         e.preventDefault();
         if (isValidEmail && isValidPassword) {
             try {
-                await createUserWithEmailAndPassword(auth, email, password);
-                const user = auth.currentUser;
-
-                if (user) {
-                    await addDoc(collection(firestore, USERS), {
-                        email: email,
-                        first_name: first_name,
-                        last_name: last_name,
-                        roles: ["regUser"],
-                        uid: user.uid
-                    });
-                }
+                const cred = await createUserWithEmailAndPassword(auth, email, password);
+                const userRef = doc(firestore, USERS, cred.user.uid);
+                await setDoc(userRef, {
+                    email: email,
+                    first_name: first_name,
+                    last_name: last_name,
+                    roles: ["regUser"],
+                    isAdmin: false
+                });
                 navigate("/");
             } catch (error) {
                 console.log(error);

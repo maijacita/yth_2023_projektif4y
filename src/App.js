@@ -16,6 +16,7 @@ import SearchTool from "./adminPanel/searchTool";
 import ManagePost from "./adminPanel/managePost";
 import ManageComment from "./adminPanel/manageComment";
 import AdminCreateUser from "./adminPanel/adminCreateUser";
+import AdminDeleteUser from "./adminPanel/adminDeleteUser";
 
 function App() {
 
@@ -55,6 +56,8 @@ function App() {
     <Route path="/ManageComment/:commentId" element={ <ManageComment/>}/>
 
     <Route path="/AdminCreateUser" element={ <AdminCreateUser/> }/>
+
+    <Route path="/AdminDeleteUser/:userId" element={ <AdminDeleteUser/> }/>
     
     </Routes>
     </div>

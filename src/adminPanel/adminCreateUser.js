@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import '../styles/LoginPage.css'
 import { useNavigate } from "react-router-dom";
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, collection, firestore, USERS, addDoc } from "../Firebase";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, doc, setDoc, firestore, USERS } from "../Firebase";
 import { generateRandomPassword } from "../utils/generateRandomPassword"; // Import the function from your utils file
+import AdminNav from "./adminNav";
+import checkAdminStatus from "../utils/isAdminFunction";
 
 const AdminCreateUser = () => {
     const [email, setEmail] = useState("");
@@ -10,6 +12,25 @@ const AdminCreateUser = () => {
     const [last_name, setLast_name] = useState("");
     const [selectedRole, setSelectedRole] = useState("regUser"); // Default role is regUser
     const navigate = useNavigate();
+    const [isAdmin, setIsAdmin] = useState(false);
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+
+    useEffect(() => {
+        const fetchAdminStatus = async () => {
+            const adminStatus = await checkAdminStatus(currentUser);
+            setIsAdmin(adminStatus);
+        };
+        if (currentUser) {
+            fetchAdminStatus();
+        }
+        return () => {
+        };
+    }, [currentUser]);
+
+    if (!isAdmin) {
+        return <div>You do not have permission to view this page.</div>;
+    }
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -41,13 +62,20 @@ const AdminCreateUser = () => {
                 if (sendResetEmail) {
                     await sendPasswordResetEmail(auth, email);
                 }
-    
-                await addDoc(collection(firestore, USERS), {
+
+                let isAdminValue = false;
+                if (selectedRole === "admin") {
+                    isAdminValue = true;
+                }
+
+                const userRef = doc(firestore, USERS, userCredential.user.uid);
+                await setDoc(userRef, {
                     email: email,
                     first_name: first_name,
                     last_name: last_name,
                     roles: [selectedRole],
-                    uid: user.uid
+                    uid: user.uid,
+                    isAdmin: isAdminValue
                 });
             }
     
@@ -60,7 +88,8 @@ const AdminCreateUser = () => {
 
     return (
         <div>
-            <div className="container"></div>
+            <div className="container">
+            {isAdmin && <AdminNav />}
                 <div className="center">
                     <h1>Admin User Management</h1>
 
@@ -113,7 +142,7 @@ const AdminCreateUser = () => {
                 <button className="Login_button" type="submit">Create account</button>
             </form>
         </div>
-    </div>
+    </div></div>
   );
 };
 

@@ -12,7 +12,7 @@ const CreatePosts = () => {
     const [user, setUser] = useState("");
 
     useEffect(() => {
-        const q = query(collection(firestore,USERS), where('email','==', auth.currentUser.email)) 
+        const q = query(collection(firestore,USERS), where('uid','==', auth.currentUser.uid)) 
         const queryUserInfo = onSnapshot(q,(querySnapshot) => {
           const tempArray = []
           querySnapshot.forEach((doc) => { // create objects of data

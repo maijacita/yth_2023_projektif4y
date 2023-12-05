@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import AdminNav from "./adminNav";
 import { Link } from "react-router-dom";
-import {firestore, collection, POSTS, USERS, COMMENTS, getDocs} from '../Firebase'
-
+import {firestore, collection, POSTS, USERS, COMMENTS, getDocs, getAuth} from '../Firebase'
+import checkAdminStatus from "../utils/isAdminFunction";
 
 const SearchTool = () => {
     const [data, setData] = useState([]);
@@ -10,8 +10,26 @@ const SearchTool = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredData, setFilteredData] = useState([]);
     const [searched, setSearched] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
 
     useEffect(() => {
+        const fetchAdminStatus = async () => {
+            const adminStatus = await checkAdminStatus(currentUser);
+            setIsAdmin(adminStatus);
+        };
+        if (currentUser) {
+            fetchAdminStatus();
+        }
+        return () => {
+        };
+    }, [currentUser]);
+
+    useEffect(() => {
+        if (!isAdmin) {
+            return; // Don't fetch tickets if user is not an admin
+        }
         const fetchData = async () => {
             try {
                 let collectionRef;
@@ -68,7 +86,7 @@ const SearchTool = () => {
         if (searchType !== '') {
             fetchData();
         }
-    }, [searchType]);
+    }, [searchType, isAdmin]);
 
     const handleSearch = () => {
         const filtered = data.filter((item) => 
@@ -78,9 +96,13 @@ const SearchTool = () => {
         setSearched(true);
     };
 
+    if (!isAdmin) {
+        return <div>You do not have permission to view this page.</div>;
+    }
+
     return (
         <div className="container">
-            <AdminNav/>
+            {isAdmin && <AdminNav />}
             <div className="center">
                 <h1>Admin Search</h1>
                 <div>
@@ -151,12 +173,13 @@ const SearchTool = () => {
                                     )}
                                     {searchType === 'users' && (
                                         <div>
+                                            <Link to={`/AdminDeleteUser/${item.id}`}>
                                             <p>ID: {item.id}</p>
                                             <p>Email: {item.email}</p>
                                             <p>First Name: {item.first_name}</p>
                                             <p>Last Name: {item.last_name}</p>
                                             <p>Roles: {item.roles}</p>
-                                            <p>UID: {item.uid}</p>
+                                            <p>UID: {item.uid}</p></Link>
                                         </div>
                                     )}
                                 </li>

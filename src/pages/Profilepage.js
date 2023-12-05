@@ -25,7 +25,8 @@ const Profile = () => {
             id: doc.id,
             first_name: doc.data().first_name,
             last_name: doc.data().last_name,
-            email: doc.data().email
+            email: doc.data().email,
+            uid: doc.data().uid
           }));
   
           setUser(userData);
@@ -40,7 +41,6 @@ const Profile = () => {
               body: doc.data().body,
               poster: doc.data().poster
             }));
-  
             setPosts(postsData);
           }
         } catch (error) {
@@ -67,7 +67,6 @@ const Profile = () => {
                      <div>
                       <h1>{data.first_name} {data.last_name}</h1>
                       <p>{auth.currentUser.email}</p>
-                      <p>{auth.currentUser.uid}</p>
                       <p>{data.id}</p>
 
                       <button onClick={openModal}>Change Password</button>

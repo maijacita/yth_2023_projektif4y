@@ -1,15 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import {firestore, where, onSnapshot, query, collection, COMMENTS, getDocs, doc, deleteDoc } from '../Firebase'
+import {firestore, query, collection, COMMENTS, getDocs, doc, deleteDoc, getAuth } from '../Firebase'
 import AdminNav from "./adminNav";
+import checkAdminStatus from "../utils/isAdminFunction";
 
 const ManageComment = () => {
 
     const [comments, setComments] = useState([]);
     const {commentId} = useParams();
     const navigate = useNavigate()
+    const [isAdmin, setIsAdmin] = useState(false);
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
 
     useEffect(() => {
+      const fetchAdminStatus = async () => {
+          const adminStatus = await checkAdminStatus(currentUser);
+          setIsAdmin(adminStatus);
+      };
+      if (currentUser) {
+          fetchAdminStatus();
+      }
+      return () => {
+      };
+  }, [currentUser]);
+
+  useEffect(() => {
+      if (!isAdmin) {
+          return; // Don't fetch tickets if user is not an admin
+      }
         const fetchData = async () => {
           try {
             const q = query(collection(firestore, COMMENTS));
@@ -34,7 +53,7 @@ const ManageComment = () => {
           }
         };
         fetchData();
-      }, [commentId]);
+      }, [commentId, isAdmin]);
 
 
       const deleteComment = async (commentId) => {
@@ -48,10 +67,13 @@ const ManageComment = () => {
         }
       };
 
+      if (!isAdmin) {
+        return <div>You do not have permission to view this page.</div>;
+    }
 
       return (
       <div>
-      <AdminNav/>
+      {isAdmin && <AdminNav />}
         <div className="center_Front">
             
         <div className="postbox">

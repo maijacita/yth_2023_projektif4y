@@ -1,13 +1,31 @@
 import React, { useState, useEffect } from "react";
 import AdminNav from "./adminNav";
-import {firestore, onSnapshot, query, collection, TICKETS, where} from '../Firebase'
+import {firestore, onSnapshot, query, collection, TICKETS, where, USERS, getAuth} from '../Firebase'
 import { Link } from "react-router-dom";
-
+import checkAdminStatus from "../utils/isAdminFunction";
 
 const ResolvedTickets = () => {
     const [tickets, setTickets] = useState([])
+    const [isAdmin, setIsAdmin] = useState(false);
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
 
     useEffect(() => {
+        const fetchAdminStatus = async () => {
+            const adminStatus = await checkAdminStatus(currentUser);
+            setIsAdmin(adminStatus);
+        };
+        if (currentUser) {
+            fetchAdminStatus();
+        }
+        return () => {
+        };
+    }, [currentUser]);
+
+    useEffect(() => {
+        if (!isAdmin) {
+            return; // Don't fetch tickets if user is not an admin
+        }
         const q = query(collection(firestore, TICKETS), where('incidentState','==', 'resolved')) 
         const queryAllTickets = onSnapshot(q, (querySnapshot) => {
             const tempArray = []
@@ -30,11 +48,15 @@ const ResolvedTickets = () => {
         return () => {
             queryAllTickets()
         }
-    }, [])
+    }, [isAdmin])
+
+    if (!isAdmin) {
+        return <div>You do not have permission to view this page.</div>;
+    }
 
     return (
         <div className="body">
-            <AdminNav/>
+            {isAdmin && <AdminNav />}
             <div className="postbox">
                 <h1>Admin panel</h1>
                 {tickets.map(ticket => (
