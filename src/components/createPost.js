@@ -50,7 +50,8 @@ const CreatePosts = () => {
               body: body,
               school_category: school_category,
               timestamp: timestamp,
-              poster: user
+              poster: user,
+              posterId: auth.currentUser.uid
             });
             console.log("Document written with ID: ", docRef.id);
             setTitle("");

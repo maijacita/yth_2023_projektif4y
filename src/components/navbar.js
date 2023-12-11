@@ -7,6 +7,7 @@ import PopupMenu from "./popupMenu";
 import GridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
 import SearchPosts from './search.js'
 import ManagementBtn from "./managementBtn.js";
+import BellNotification from "./bellNotification.js";
 
 const NavBar = () => {
 
@@ -28,6 +29,8 @@ const NavBar = () => {
             <SearchPosts/>
             
             <ManagementBtn/>
+
+            <BellNotification/>
 
 
         <div className="nav_Right">

@@ -37,7 +37,8 @@ const PostDescription = ({ title, body }) => {
                   school_category: doc.data().school_category,
                   body: doc.data().body,
                   timestamp: timestamp,
-                  poster: doc.data().poster
+                  poster: doc.data().poster,
+                  posterId: doc.data().posterId
                 };
                 tempArray.push(postData);
               }
@@ -49,7 +50,6 @@ const PostDescription = ({ title, body }) => {
         };
         fetchData();
       }, [postId]);
-
 
       useEffect(() => {
         const q = query(collection(firestore,COMMENTS), where ("postId", "==", postId)) 
@@ -171,7 +171,9 @@ const PostDescription = ({ title, body }) => {
 
         <div className="postbox">
           
-          {comments.map(comments => (
+          {comments.length === 0 ? (
+                    <p>No comments yet.</p>
+                ) : (comments.map(comments => (
             <div>
               <div>
               {currentUser &&
@@ -209,15 +211,11 @@ const PostDescription = ({ title, body }) => {
             </h3>
             <p className="postTextBody">{comments.comment}</p>
             </div>
-          ))}
+          )))}
         </div>
         </div>
-        
-        
         </div>
       );
-      
-
 }
 
 export default PostDescription

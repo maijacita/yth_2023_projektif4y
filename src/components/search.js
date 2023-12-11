@@ -62,7 +62,6 @@ const SearchPosts = () => {
                     <SearchIcon fontSize="medium" />
                 </button>
             </div>
-
             <div className="dropdown-menu-search">
                 <div className="searchMatch">
                     {searched && filteredPosts.length === 0 && (

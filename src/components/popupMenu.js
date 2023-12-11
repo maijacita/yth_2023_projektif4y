@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import React from "react";
 import '../styles/PopupMenu.css'
 import { getAuth, signOut } from '../Firebase'
 
@@ -22,15 +22,16 @@ const PopupMenu = () => {
         <div className="dropdown-menu">
           <ul>
             <Link to="/Profile">
-            <li>Profile</li>
+              <li>Profile</li>
             </Link>
+                <li onClick={handleLogout}>Logout</li>
+                  <Link to="/YourFavourites">
+                <li>Saved Posts</li>
+                </Link>
+                  <Link to="/YourNotifications">
+                    <li>Activity</li>
+                  </Link>
 
-             <li onClick={handleLogout}>Logout</li>
-             
-             <Link to="/YourFavourites">
-            <li>Saved Posts</li>
-            </Link>
-            
           </ul>
         </div>
       );

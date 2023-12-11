@@ -17,6 +17,7 @@ import ManagePost from "./adminPanel/managePost";
 import ManageComment from "./adminPanel/manageComment";
 import AdminCreateUser from "./adminPanel/adminCreateUser";
 import AdminDeleteUser from "./adminPanel/adminDeleteUser";
+import NotificationPage from "./subPages/notificationPage";
 
 function App() {
 
@@ -58,6 +59,8 @@ function App() {
     <Route path="/AdminCreateUser" element={ <AdminCreateUser/> }/>
 
     <Route path="/AdminDeleteUser/:userId" element={ <AdminDeleteUser/> }/>
+
+    <Route path="/YourNotifications" element={ <NotificationPage/> }/>
     
     </Routes>
     </div>
