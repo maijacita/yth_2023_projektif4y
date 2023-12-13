@@ -8,8 +8,7 @@ import ReportBtn from "../components/reportBtn";
 const PosterProfile = () => {
 
     const [user, setUser] = useState([])
-    const {userProfileId} = useParams();
-    console.log('users email:', userProfileId);
+    const {posterId} = useParams();
     const [posts, setPosts] = useState([]);
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
@@ -17,46 +16,44 @@ const PosterProfile = () => {
       setIsReportModalOpen(true);
     };
 
-      useEffect(() => {
-        const fetchUserDataAndPosts = async () => {
-          try {
-            const userQuery = query(collection(firestore, USERS));
-            const userSnapshot = await getDocs(userQuery);
-            const tempArray = []
-
-            userSnapshot.forEach((doc) => {
-                if(doc.id === userProfileId) {
-                    const userData = {
-                        id: doc.id,
-                        first_name: doc.data().first_name,
-                        last_name: doc.data().last_name,
-                        email: doc.data().email
-                    }
-                    tempArray.push(userData);
-                }
-            });
-            setUser(tempArray);
-    
-            if (tempArray.length > 0) {
-              const postsQuery = query(collection(firestore, POSTS), where('poster', 'array-contains', tempArray[0]));
-              const postsSnapshot = await getDocs(postsQuery);
-    
-              const postsData = postsSnapshot.docs.map((doc) => ({
-                id: doc.id,
-                title: doc.data().title,
-                body: doc.data().body,
-                poster: doc.data().poster
-              }));
-    
-              setPosts(postsData);
-            }
-          } catch (error) {
-            console.error('Error fetching user data and posts:', error);
+    useEffect(() => {
+      const fetchUserDataAndPosts = async () => {
+        try {
+          const userQuery = query(collection(firestore, USERS), where("uid", "==", posterId));
+          const userSnapshot = await getDocs(userQuery);
+  
+          const userData = userSnapshot.docs.map((doc) => ({
+            id: doc.id,
+            first_name: doc.data().first_name,
+            last_name: doc.data().last_name,
+            email: doc.data().email,
+            uid: doc.data().uid
+          }));
+  
+          setUser(userData);
+  
+          if (userData.length > 0) {
+            const postsQuery = query(collection(firestore, POSTS), where('posterId', '==', posterId));
+            const postsSnapshot = await getDocs(postsQuery);
+  
+            const postsData = postsSnapshot.docs.map((doc) => ({
+              id: doc.id,
+              title: doc.data().title,
+              body: doc.data().body,
+              poster: doc.data().poster
+            }));
+            setPosts(postsData);
           }
-        };
-    
-        fetchUserDataAndPosts();
-      }, [userProfileId]);
+        } catch (error) {
+          console.error('Error fetching user data and posts:', error);
+        }
+      };
+  
+      fetchUserDataAndPosts();
+    }, [posterId]);
+
+    console.log('User:', user);
+    console.log('Posts:', posts);
 
     return (
         <div className="body">
@@ -80,7 +77,7 @@ const PosterProfile = () => {
               incidentType="user"/>
             </div>
                       <h1>{data.first_name} {data.last_name}</h1>
-                      <p>{userProfileId}</p>
+                      <p>{posterId}</p>
                       <p>{data.email}</p>
                       <p>{data.id}</p>
                       </div>)}))}

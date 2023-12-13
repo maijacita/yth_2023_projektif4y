@@ -62,7 +62,8 @@ const PostDescription = ({ title, body }) => {
               id: doc.id,
               comment: data.text,
               timestamp: timestamp,
-              commenter: data.commenter
+              commenter: data.commenter,
+              commenterId: data.commenterId
             }
             tempArray.push(commentObject) // push object into temporary array
           })
@@ -125,13 +126,16 @@ const PostDescription = ({ title, body }) => {
 
                     <h2 className="postTextTitle">{data.title}</h2>
 
-                    <Link to={data.poster && Array.isArray(data.poster) && data.poster.length > 0 ? `/PosterProfile/${data.poster[0].id}` : '#'}>
-                    <h2 className="postTextBody">
-                      {data.poster && Array.isArray(data.poster) && data.poster.length > 0
-                        ? data.poster[0].email
-                        : 'Poster Profile Unavailable'}
-                    </h2>
-                  </Link>
+                    {auth.currentUser.uid === data.posterId ? (
+                  <Link to={`/Profile/${data.posterId}`}>
+                  <h2 className="postTextBody">{data.poster && Array.isArray(data.poster) && data.poster.length > 0
+                              ? data.poster[0].email
+                              : 'Poster Profile Unavailable'}</h2></Link>
+                        ) : (<Link to={`/PosterProfile/${data.posterId}`}>
+                            <h2 className="postTextBody">{data.poster && Array.isArray(data.poster) && data.poster.length > 0
+                              ? data.poster[0].email
+                              : 'Poster Profile Unavailable'}</h2></Link>
+                        )}
 
                     <p class={`postTextCategory ${
     data.school_category === 'Projects'
@@ -204,11 +208,19 @@ const PostDescription = ({ title, body }) => {
                     minute: 'numeric',
                     })}
             </h3>
-            <h3 className="postTextBody">
-              {comments.commenter && Array.isArray(comments.commenter) && comments.commenter.length > 0
-                ? comments.commenter[0].email
-                : ''}
-            </h3>
+
+            {auth.currentUser.uid === comments.commenterId ? (
+              <Link to={`/Profile/${comments.commenterId}`}>
+                <h3 className="postTextBody">
+                  {comments.commenter && Array.isArray(comments.commenter) && comments.commenter.length > 0
+                ? comments.commenter[0].email: ''}</h3>
+              </Link>)
+              : (<Link to={`/PosterProfile/${comments.commenterId}`}>
+                  <h3 className="postTextBody">
+                    {comments.commenter && Array.isArray(comments.commenter) && comments.commenter.length > 0
+                  ? comments.commenter[0].email: ''}</h3>
+              </Link>)}
+
             <p className="postTextBody">{comments.comment}</p>
             </div>
           )))}

@@ -9,17 +9,19 @@ const BellNotification = () => {
     const auth = getAuth();
     const [userPosts, setUserPosts] = useState([]);
     const [showMenu, setShowMenu] = useState(false);
+    const [isHighlighted, setIsHighlighted] = useState(false);
   
     useEffect(() => {
         const fetchPostsAndNotificationData = async () => {
         try {
-        const postQuery = query(collection(firestore, POSTS), where("posterId", "==", auth.currentUser.uid))
+        const postQuery = query(collection(firestore, POSTS), where("posterId", "==", auth.currentUser.uid || "highlighted", "==", true))
         const postsSnapshot = await getDocs(postQuery);
   
         const postsData = postsSnapshot.docs.map((doc) => ({
             id: doc.id,
             postId: doc.data().postId,
-            posterId: doc.data().posterId
+            posterId: doc.data().posterId,
+            highlighted: doc.data().highlighted || false
         }));
         setUserPosts(postsData)
 
@@ -35,9 +37,13 @@ const BellNotification = () => {
                 commenterId: doc.data().commenterId,
                 postId: doc.data().postId,
                 text: doc.data().text,
-                timestamp: doc.data().timestamp.toDate()
+                timestamp: doc.data().timestamp.toDate(),
+                highlighted: doc.data().highlighted || false
             }));
             setNotification(notificationData)
+
+            const hasHighlightedNotification = notificationData.some(notification => notification.highlighted);
+            setIsHighlighted(hasHighlightedNotification);
         }
     } catch(error) {
         console.error('Error fetching post and notification data:', error);
@@ -78,9 +84,16 @@ const BellNotification = () => {
             <div key={notification.id}>
                 <Link to={`/Post/${notification.postId}`} onClick={() => handleNotificationClick(notification.id)}>
                 <li>
-                    <p>{notification.commenter && Array.isArray(notification.commenter) && notification.commenter.length > 0
-                        ? notification.commenter[0].email
-                        : 'Poster Profile Unavailable'} commented your post: {notification.text}</p>
+                <p>
+                    {notification.commenter && notification.commenter.length > 0 ? (
+                        <span>
+                        {notification.commenter[0].email} {notification.highlighted ? 'posted from administration' : 'commented your post: ' }
+                        </span>) : (`Unknown commenter:`)}
+                </p>
+
+                {!notification.highlighted && (
+                    <p>{notification.text}</p>
+                )}
 
                     <p>
                     {new Date(notification.timestamp).toLocaleDateString({

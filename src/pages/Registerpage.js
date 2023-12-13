@@ -45,7 +45,8 @@ const Register = () => {
                     first_name: first_name,
                     last_name: last_name,
                     roles: ["regUser"],
-                    isAdmin: false
+                    isAdmin: false,
+                    uid: cred.user.uid
                 });
                 navigate("/");
             } catch (error) {

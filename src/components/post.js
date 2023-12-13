@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import {  Link, useParams } from "react-router-dom";
-import {firestore, onSnapshot, query, collection, POSTS} from '../Firebase'
+import { Link } from "react-router-dom";
+import {firestore, onSnapshot, query, collection, POSTS, getAuth} from '../Firebase'
 import '../styles/FrontPage.css'
 import SortByTime from "./sortByTime";
 
 const Post = () => {
 
     const [posts, setPosts] = useState([]) // array for posts
+    const auth = getAuth()
 
     useEffect(() => {
         const q = query(collection(firestore,POSTS)) 
@@ -21,7 +22,8 @@ const Post = () => {
               school_category: data.school_category,
               body: data.body,
               timestamp: timestamp,
-              poster : data.poster
+              poster : data.poster,
+              posterId : data.posterId
             }
             tempArray.push(postsObject) // push object into temporary array
           })
@@ -44,13 +46,16 @@ const Post = () => {
                 <Link to={`/Post/${posts.id}`}>
                     <h2 class="postTextTitle">{posts.title}</h2></Link>
 
-                <Link to={posts.poster && Array.isArray(posts.poster) && posts.poster.length > 0 ? `/PosterProfile/${posts.poster[0].id}` : '#'}>
-                    <h2 className="postTextBody">
-                      {posts.poster && Array.isArray(posts.poster) && posts.poster.length > 0
-                        ? posts.poster[0].email
-                        : 'Poster Profile Unavailable'}
-                    </h2>
-                </Link>
+                {auth.currentUser.uid === posts.posterId ? (
+                  <Link to={`/Profile/${posts.posterId}`}>
+                  <h2 className="postTextBody">{posts.poster && Array.isArray(posts.poster) && posts.poster.length > 0
+                              ? posts.poster[0].email
+                              : 'Poster Profile Unavailable'}</h2></Link>
+                        ) : (<Link to={`/PosterProfile/${posts.posterId}`}>
+                            <h2 className="postTextBody">{posts.poster && Array.isArray(posts.poster) && posts.poster.length > 0
+                              ? posts.poster[0].email
+                              : 'Poster Profile Unavailable'}</h2></Link>
+                        )}
 
                     <p class="postTextBody">{new Date(posts.timestamp).toLocaleDateString({
                     year: 'numeric',
@@ -72,13 +77,10 @@ const Post = () => {
       ? 'lila-text'
       : ''
   }`}>{posts.school_category}</p>
-                    
-                
                 </div>
                 ))}
     </div>
     )
 }
-
 
 export default Post

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "../components/navbar";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {firestore, getAuth,collection, query,where, USERS, POSTS, getDocs} from '../Firebase'
 import "../styles/ProfilePage.css"
 import ChangePasswordModal from "../components/changePwModal";
@@ -11,6 +11,7 @@ const Profile = () => {
     const [user, setUser] = useState([])
     const [posts, setPosts] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const {userId} = useParams();
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);

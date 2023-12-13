@@ -65,7 +65,8 @@ const CommentPost = () => {
                       posterId: fetchedPosterId,
                       timestamp: timestamp,
                       text: comment,
-                      isRead: false
+                      isRead: false,
+                      highlighted: false
                   });
               }
               setComment("");

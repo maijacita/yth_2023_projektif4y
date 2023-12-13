@@ -32,11 +32,11 @@ function App() {
 
     <Route path="/Home" element={ <Home/>}/>
 
-    <Route path="/Profile" element={ <Profile/>}/>
+    <Route path="/Profile/:userId" element={ <Profile/>}/>
 
     <Route path="/Post/:postId" element={ <PostDescription/>}/>
 
-    <Route path="/PosterProfile/:userProfileId" element={ <PosterProfile/>}/>
+    <Route path="/PosterProfile/:posterId" element={ <PosterProfile/>}/>
 
     <Route path="/ResetPassword" element={ <ResetPassword/>}/>
 
