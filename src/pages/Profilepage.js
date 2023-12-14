@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "../components/navbar";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {firestore, getAuth,collection, query,where, USERS, POSTS, getDocs} from '../Firebase'
 import "../styles/ProfilePage.css"
 import ChangePasswordModal from "../components/changePwModal";
+import UpdateProfileModal from "../components/updateProfileModal";
 
 const Profile = () => {
 
@@ -11,7 +12,6 @@ const Profile = () => {
     const [user, setUser] = useState([])
     const [posts, setPosts] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const {userId} = useParams();
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
@@ -19,7 +19,7 @@ const Profile = () => {
     useEffect(() => {
       const fetchUserDataAndPosts = async () => {
         try {
-          const userQuery = query(collection(firestore, USERS), where('email', '==', auth.currentUser.email));
+          const userQuery = query(collection(firestore, USERS), where('uid', '==', auth.currentUser.uid));
           const userSnapshot = await getDocs(userQuery);
   
           const userData = userSnapshot.docs.map((doc) => ({
@@ -33,7 +33,7 @@ const Profile = () => {
           setUser(userData);
   
           if (userData.length > 0) {
-            const postsQuery = query(collection(firestore, POSTS), where('poster', 'array-contains', userData[0]));
+            const postsQuery = query(collection(firestore, POSTS), where('posterId', '==', auth.currentUser.uid));
             const postsSnapshot = await getDocs(postsQuery);
   
             const postsData = postsSnapshot.docs.map((doc) => ({
@@ -50,7 +50,7 @@ const Profile = () => {
       };
   
       fetchUserDataAndPosts();
-    }, [auth.currentUser.email]);
+    }, [auth.currentUser.uid]);
 
     console.log('User:', user);
     console.log('Posts:', posts);
@@ -72,6 +72,12 @@ const Profile = () => {
 
                       <button onClick={openModal}>Change Password</button>
                       <ChangePasswordModal
+                      isOpen={isModalOpen}
+                      onRequestClose={closeModal}
+                      />
+
+                      <button onClick={openModal}>Update user's name</button>
+                      <UpdateProfileModal
                       isOpen={isModalOpen}
                       onRequestClose={closeModal}
                       />

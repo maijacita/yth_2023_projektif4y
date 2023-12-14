@@ -6,6 +6,7 @@ import NavBar from "../components/navbar";
 import CommentPost from "../components/commentPost";
 import SaveFavourite from "../components/saveFavourite";
 import ReportBtn from "../components/reportBtn";
+import UpdatePostModal from "../components/updatePostModal";
 
 const PostDescription = ({ title, body }) => {
 
@@ -14,12 +15,16 @@ const PostDescription = ({ title, body }) => {
     const [comments, setComments] = useState([]);
     const auth = getAuth();
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const currentUser = auth.currentUser
     const navigate = useNavigate()
 
     const handleReportClick = () => {
       setIsReportModalOpen(true);
     };
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -123,6 +128,17 @@ const PostDescription = ({ title, body }) => {
                 currentUser.uid === data.poster[0].uid && (
                   <button onClick={() => deletePost(data.id)}>Delete Post</button>
                 )}</div>
+
+                <div>
+                {currentUser && currentUser.uid === data.posterId && (
+                  <>
+                      <button onClick={openModal}>Update post</button>
+                      <UpdatePostModal
+                      isOpen={isModalOpen}
+                      onRequestClose={closeModal}
+                      />
+                      </>)}
+                </div>
 
                     <h2 className="postTextTitle">{data.title}</h2>
 

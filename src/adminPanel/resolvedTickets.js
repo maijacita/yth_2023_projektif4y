@@ -57,6 +57,7 @@ const ResolvedTickets = () => {
     return (
         <div className="body">
             {isAdmin && <AdminNav />}
+            <div className="center_Front">
             <div className="postbox">
                 <h1>Admin panel</h1>
                 {tickets.map(ticket => (
@@ -80,6 +81,7 @@ const ResolvedTickets = () => {
                     </div>
                 ))}
             </div>
+        </div>
         </div>
     )
 }
