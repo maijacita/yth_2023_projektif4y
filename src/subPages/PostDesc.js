@@ -7,6 +7,7 @@ import CommentPost from "../components/commentPost";
 import SaveFavourite from "../components/saveFavourite";
 import ReportBtn from "../components/reportBtn";
 import UpdatePostModal from "../components/updatePostModal";
+import UpdateCommentModal from "../components/updateCommentModal";
 
 const PostDescription = ({ title, body }) => {
 
@@ -18,6 +19,23 @@ const PostDescription = ({ title, body }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const currentUser = auth.currentUser
     const navigate = useNavigate()
+    const [commentModals, setCommentModals] = useState({});
+
+        // Function to open the comment update modal for a specific comment ID
+        const openCommentModal = (commentId) => {
+          setCommentModals({
+              ...commentModals,
+              [commentId]: true
+          });
+      };
+  
+      // Function to close the comment update modal for a specific comment ID
+      const closeCommentModal = (commentId) => {
+          setCommentModals({
+              ...commentModals,
+              [commentId]: false
+          });
+      };
 
     const handleReportClick = () => {
       setIsReportModalOpen(true);
@@ -100,13 +118,10 @@ const PostDescription = ({ title, body }) => {
 
       return (
         <div className="body">
-
         <NavBar/>
-
-        <div className="center_Front">
-        <div className="postbox">
-
-          <SaveFavourite postId={postId} title={title} body={body}/>
+          <div className="center_Front">
+            <div className="postbox">
+              <SaveFavourite postId={postId} title={title} body={body}/>
 
         <div>
         <ReportBtn
@@ -154,54 +169,61 @@ const PostDescription = ({ title, body }) => {
                         )}
 
                     <p class={`postTextCategory ${
-    data.school_category === 'Projects'
-      ? 'blue-text'
-      : data.school_category === 'Other'
-      ? 'pink-text'
-      : data.school_category === 'Courses'
-      ? 'orange-text'
-      : data.school_category === 'Job and internship'
-      ? 'green-text'
-      : data.school_category === 'Event'
-      ? 'brown-text'
-      : data.school_category === 'Information'
-      ? 'lila-text'
-      : ''
-  }`}>{data.school_category}</p>
+                        data.school_category === 'Projects'
+                        ? 'blue-text'
+                        : data.school_category === 'Other'
+                        ? 'pink-text'
+                        : data.school_category === 'Courses'
+                        ? 'orange-text'
+                        : data.school_category === 'Job and internship'
+                        ? 'green-text'
+                        : data.school_category === 'Event'
+                        ? 'brown-text'
+                        : data.school_category === 'Information'
+                        ? 'lila-text'
+                        : ''}`}>
+                    {data.school_category}</p>
 
-                    <h2 class="postTextBody">
+                  <h2 class="postTextBody">
                     {new Date(data.timestamp).toLocaleDateString({
                     year: 'numeric',
                     month: 'short',
-                    day: 'numeric',
-                    })}{' '}
+                    day: 'numeric',})}
+                    {' '}
                     {new Date(data.timestamp).toLocaleTimeString({
                     hour: 'numeric',
-                    minute: 'numeric',
-                    })}</h2>
-
-                    <h2 className="postTextBody">{data.body}</h2>
+                    minute: 'numeric',})}
+                  </h2>
+                <h2 className="postTextBody">{data.body}</h2>
                 </div>
               );
             })
           )}
         </div>
         <CommentPost/>
-        
 
         <div className="postbox">
-          
-          {comments.length === 0 ? (
-                    <p>No comments yet.</p>
-                ) : (comments.map(comments => (
-            <div>
+          {comments.length === 0 ? (<p>No comments yet.</p>) 
+          : (comments.map(comments => (
+            <div key={comments.id}>
               <div>
               {currentUser &&
               currentUser.uid === comments.commenter[0].uid && (
               <button onClick={() => deleteComment(comments.id)}>
                 Delete Comment
-              </button>
-            )}
+              </button>)}
+              </div>
+
+            <div>
+              {currentUser && currentUser.uid === comments.commenterId && (
+                <button onClick={() => openCommentModal(comments.id)}>
+                  Update comment
+                </button>)}
+
+              <UpdateCommentModal
+                isOpen={commentModals[comments.id]}
+                onRequestClose={() => closeCommentModal(comments.id)}
+               commentId={comments.id}/>
             </div>
 
         <div>
@@ -217,12 +239,11 @@ const PostDescription = ({ title, body }) => {
               {new Date(comments.timestamp).toLocaleDateString({
                     year: 'numeric',
                     month: 'short',
-                    day: 'numeric',
-                    })}{' '}
+                    day: 'numeric',})}
+                    {' '}
               {new Date(comments.timestamp).toLocaleTimeString({
                     hour: 'numeric',
-                    minute: 'numeric',
-                    })}
+                    minute: 'numeric',})}
             </h3>
 
             {auth.currentUser.uid === comments.commenterId ? (
@@ -240,8 +261,8 @@ const PostDescription = ({ title, body }) => {
             <p className="postTextBody">{comments.comment}</p>
             </div>
           )))}
-        </div>
-        </div>
+            </div>
+          </div>
         </div>
       );
 }
