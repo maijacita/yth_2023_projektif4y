@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import '../styles/LoginPage.css';
 import Image from "../f4f_logo.jpg";
 import { Link, useNavigate } from "react-router-dom";
-import { getAuth, createUserWithEmailAndPassword, collection, USERS, firestore, setDoc, doc } from "../Firebase";
+import { getAuth, createUserWithEmailAndPassword, USERS, firestore, setDoc, doc } from "../Firebase";
 import { validatePassword } from '../utils/passwordValidator';
 import { validateEmail } from "../utils/emailValidator";
 
@@ -46,6 +46,7 @@ const Register = () => {
                     last_name: last_name,
                     roles: ["regUser"],
                     isAdmin: false,
+                    isBlocked: false,
                     uid: cred.user.uid
                 });
                 navigate("/");

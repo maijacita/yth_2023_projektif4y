@@ -23,8 +23,6 @@ const Login = () => {
         });
       }
 
-    
-
     return (
         <div>
             <div className="container"></div>
