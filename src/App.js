@@ -20,7 +20,6 @@ import AdminDeleteUser from "./adminPanel/adminDeleteUser";
 import NotificationPage from "./subPages/notificationPage";
 
 function App() {
-
   return (
     <Router>
     <div>
@@ -65,6 +64,7 @@ function App() {
     </Routes>
     </div>
     </Router>
+    
   );
 }
 

@@ -92,7 +92,7 @@ const Register = () => {
                     {isValidPassword && <p>Password is valid!</p>}
                 </div>
 
-                    <button className="Login_button" type="submit">Create account</button>
+                    <button className="Login_button" type="submit" data-testid="button">Create account</button>
             </form>
 
                         <div class="signup_link">
