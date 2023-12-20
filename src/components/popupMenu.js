@@ -52,11 +52,12 @@ const PopupMenu = () => {
             <Link to={`/Profile/${users.id}`}>
               <li>Profile</li>
             </Link>
-            </div>))}
-                <li onClick={handleLogout}>Logout</li>
-                  <Link to="/YourFavourites">
+
+            <li onClick={handleLogout}>Logout</li>
+
+                  <Link to={`/YourFavourites/${users.id}`}>
                 <li>Saved Posts</li>
-                </Link>
+                </Link></div>))}
                   <Link to="/YourNotifications">
                     <li>Activity</li>
                   </Link>

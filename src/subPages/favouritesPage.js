@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import NavBar from "../components/navbar";
 import "../styles/ProfilePage.css"
 import Image from "../yf_logo.jpg"
-import { FAVOURITES, firestore, getDocs,getAuth,collection, query,where, POSTS, doc, getDoc } from '../Firebase'
+import { FAVOURITES, firestore, getDocs, getAuth, collection, query, where, POSTS, doc, getDoc } from '../Firebase'
 
 const FavouritesPage = () => {
 
     const auth = getAuth()
     const [favourite, setFavourite] = useState([])
     const [posts, setPosts] = useState([])
+    const {userId} = useParams()
 
     useEffect(() => {
         const fetchFavouritesDataAndPosts = async () => {
             try {
-                const userQuery = query(collection(firestore, FAVOURITES), where('uid', '==', auth.currentUser.uid));
+                const userQuery = query(collection(firestore, FAVOURITES), where('uid', '==', userId));
                 const userSnapshot = await getDocs(userQuery);
     
                 const favouritesData = userSnapshot.docs.map((doc) => ({
@@ -40,7 +41,6 @@ const FavouritesPage = () => {
                             postsData.push(postData);
                         }
                     }
-    
                     setPosts(postsData);
                 }
             } catch (error) {
@@ -49,10 +49,7 @@ const FavouritesPage = () => {
         };
     
         fetchFavouritesDataAndPosts();
-    }, [auth.currentUser.uid]);
-
-      console.log('Favourites:', favourite);
-      console.log('Posts:', posts);
+    }, [userId]);
 
       return (
         <div className="body">
@@ -63,7 +60,9 @@ const FavouritesPage = () => {
             <div className="center_Profile">
             <div className="postbox"><img className="yf_img" src={Image} alt="Your favourities"></img></div>
             <div className="postbox">
-                    {posts.map(function (data) {
+            {posts.length === 0 ? (
+            <p>No saved posts</p>
+          ) : (posts.map(function (data) {
               return (
                 <div>
                   <Link to={`/Post/${data.id}`}>
@@ -71,12 +70,11 @@ const FavouritesPage = () => {
                     <p className="postTextBody">{data.body}</p>
                 </div>
               );
-            })}
+            }))}
             </div>
             </div>
         </div>
     )
-        
 }
 
 export default FavouritesPage

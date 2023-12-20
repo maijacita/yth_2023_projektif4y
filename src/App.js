@@ -41,7 +41,7 @@ function App() {
 
     <Route path="/DeleteUser" element={ <DeleteUser/>}/>
 
-    <Route path="/YourFavourites" element={ <FavouritesPage/>}/>
+    <Route path="/YourFavourites/:userId" element={ <FavouritesPage/>}/>
 
     <Route path="/TicketQueue" element={ <TicketQ/> }/>
 

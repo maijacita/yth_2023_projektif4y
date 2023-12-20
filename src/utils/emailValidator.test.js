@@ -12,6 +12,8 @@ describe('Email Validation', () => {
     expect(validateEmail('invalidemaildomain@oamk.com')).toBe(false);
     expect(validateEmail('wrong@students.otherschool.fi')).toBe(false);
     expect(validateEmail('missingdomain@students.oamk')).toBe(false);
+    expect(validateEmail('typoindomain@aomk.fi')).toBe(false);
+    expect(validateEmail('typoindomain2@student.oamk.fi')).toBe(false);
   });
 
   it('should not validate non-OAMK email addresses', () => {

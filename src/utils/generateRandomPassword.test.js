@@ -16,6 +16,4 @@ describe('generateRandomPassword function', () => {
       expect(charset).toContain(char);
     }
   });
-
-  // Add more specific tests as needed based on the requirements of the function
 });

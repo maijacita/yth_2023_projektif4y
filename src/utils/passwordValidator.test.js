@@ -11,7 +11,7 @@ describe('validatePassword function', () => {
 
   it('should return false for an invalid password', () => {
     // Invalid passwords don't meet the criteria
-    const invalidPasswords = ['weakpassword', '12345678', 'NoSpecialCharacter123'];
+    const invalidPasswords = ['weakpassword', '12345678', 'nouppercase1!', 'NOLOWERCASE1!', 'Short1!', 'NoSpecialCharacter123'];
     invalidPasswords.forEach(password => {
       expect(validatePassword(password)).toBe(false);
     });

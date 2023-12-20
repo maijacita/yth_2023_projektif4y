@@ -9,7 +9,7 @@ const Login = () => {
     const [password, setPassword] = useState("")
     const navigate = useNavigate();
 
-    const handleLogin = async(e) => {
+    const handleLogin = async (e) => {
         const auth = getAuth()
         e.preventDefault();
         signInWithEmailAndPassword(auth, email, password)
@@ -45,7 +45,7 @@ const Login = () => {
                             <a>Forgot Password?</a>
                             </Link></div>
 
-                        <button className="Login_button" type="submit" onClick={handleLogin}>Login</button>
+                        <button className="Login_button" type="submit" onClick={handleLogin} data-testid="loginButton">Login</button>
                     </form>
                         
                         <div class="signup_link">
