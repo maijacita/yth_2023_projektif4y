@@ -35,6 +35,12 @@
     margin-top: 10%;
   }
 
+  .bckhome{
+    position: fixed;
+    width: 23vw;
+    position: static;
+  }
+
   .nav_Right{
     position: relative;
   }

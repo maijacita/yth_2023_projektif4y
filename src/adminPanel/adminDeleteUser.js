@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import '../styles/LoginPage.css';
-import { useParams } from "react-router-dom";
-import { collection, firestore, USERS, updateDoc, query, getDocs, doc } from "../Firebase";
+import { useParams, Link } from "react-router-dom";
+import { collection, firestore, USERS, updateDoc, query, getDocs, doc, TICKETS, where, onSnapshot } from "../Firebase";
 import AdminNav from "./adminNav";
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 
 const AdminDeleteUser = () => {
     const [user, setUser] = useState([]);
+    const [tickets, setTickets] = useState([]);
     const { userId } = useParams();
     const [isBlocked, setIsBlocked] = useState(false);
 
@@ -38,12 +39,35 @@ const AdminDeleteUser = () => {
         fetchUserData();
       }, [userId]);
 
-    const handleBlockUser = async () => {
+      useEffect(() => {
+        const q = query(collection(firestore, TICKETS), where('incidentId', '==', userId));
+        const queryAllTickets = onSnapshot(q, (querySnapshot) => {
+            const tempArray = [];
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const ticketsObject = {
+                    id: doc.id,
+                    reportReason: data.reportReason,
+                    incidentState: data.incidentState
+                };
+                tempArray.push(ticketsObject);
+            });
+            setTickets(tempArray);
+        });
+
+        return () => {
+            queryAllTickets(); // Unsubscribe from the tickets query snapshot
+        };
+    }, [userId]);
+
+      const handleBlockUser = async () => {
         try {
             const docRef = doc(firestore, USERS, userId);
-            await updateDoc(docRef, { isBlocked: true });
-            setIsBlocked(true);
-            alert('User blocked');
+            const updatedIsBlocked = !isBlocked;
+
+            await updateDoc(docRef, { isBlocked: updatedIsBlocked });
+            setIsBlocked(updatedIsBlocked);
+            alert(updatedIsBlocked ? 'User blocked' : 'User unblocked');
         } catch (error) {
             console.error('Error updating user data:', error);
         }
@@ -52,10 +76,10 @@ const AdminDeleteUser = () => {
     return (
         <div>
             <div className="body">
-            <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"></link>
                 <AdminNav />
-                <div className="center_Profile">
-                    <div className="profileBox">
+                <div className="center_Front">
+                    <div className="postbox">
+                        <div>
                         {user.map(function (data) {
                             return (
                                 <div key={data.id}>
@@ -75,9 +99,20 @@ const AdminDeleteUser = () => {
                             );
                         })}
                     </div>
+                    <div>
+                    {tickets.map(function (data) {
+                        return(
+                        <div key={data.id}>
+                            <Link to={`/Ticket/${data.id}`}><h2>Ticket ID: {data.id}</h2></Link>
+                            <p>Incident State: {data.incidentState}</p>
+                            <p>Report Reason: {data.reportReason}</p>
+                        </div>
+                    )})}
+                </div>
+                    </div>
+                    </div>
                 </div>
             </div>
-        </div>
     );
 };
 

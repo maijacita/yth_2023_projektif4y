@@ -121,6 +121,7 @@ const PostDescription = ({ title, body }) => {
         <NavBar/>
           <div className="center_Front">
             <div className="postbox">
+              <div className="postbox_btn">
               <SaveFavourite postId={postId} title={title} body={body}/>
 
         <div>
@@ -130,7 +131,7 @@ const PostDescription = ({ title, body }) => {
           onRequestClose={() => setIsReportModalOpen(false)}
           incidentId={postId}
           incidentType="post"/>
-        </div>
+        </div></div>
 
           {posts.length === 0 ? (
             <p>Loading...</p>
@@ -138,6 +139,7 @@ const PostDescription = ({ title, body }) => {
             posts.map(function (data) {
               return (
                 <div>
+            <div className="postbox_postEdit">
               <div>
               {currentUser &&
                 currentUser.uid === data.poster[0].uid && (
@@ -154,6 +156,7 @@ const PostDescription = ({ title, body }) => {
                       />
                       </>)}
                 </div>
+              </div>
 
                     <h2 className="postTextTitle">{data.title}</h2>
 
@@ -206,6 +209,7 @@ const PostDescription = ({ title, body }) => {
           {comments.length === 0 ? (<p>No comments yet.</p>) 
           : (comments.map(comments => (
             <div key={comments.id}>
+              <div className="postbox_postEdit">
               <div>
               {currentUser &&
               currentUser.uid === comments.commenter[0].uid && (
@@ -225,14 +229,16 @@ const PostDescription = ({ title, body }) => {
                 onRequestClose={() => closeCommentModal(comments.id)}
                commentId={comments.id}/>
             </div>
+          </div>
 
         <div>
-            <ReportBtn
-              onClick={handleReportClick}
-              isOpen={isReportModalOpen}
-              onRequestClose={() => setIsReportModalOpen(false)}
-              incidentId={comments.id}
-              incidentType="comment"/>
+        {currentUser && currentUser.uid !== comments.commenterId && (
+          <ReportBtn
+          onClick={handleReportClick}
+          isOpen={isReportModalOpen}
+          onRequestClose={() => setIsReportModalOpen(false)}
+          incidentId={comments.id}
+          incidentType="comment"/>)}
         </div>
 
             <h3 className="postTextBody">

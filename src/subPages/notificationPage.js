@@ -80,8 +80,8 @@ const NotificationPage = () => {
             <button onClick={deleteAllNotifications}>Delete All Notifications</button>
             <div className="postbox">
                 {notification.length === 0 ? (
-                    <p>No notifications</p>
-                ) : (notification.map((notification) => (
+                    <p>No notifications</p>) : (notification.map((notification) => (
+                      
             <div key={notification.id}>
                 <Link to={`/Post/${notification.postId}`}>
                 <li>

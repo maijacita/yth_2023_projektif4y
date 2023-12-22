@@ -1,10 +1,10 @@
 import React, {useState} from "react";
 import '../styles/navBar.css'
-import Image from "../f4f.jpg"
+import FirstImage from "../f4f.jpg"
 import { Link } from "react-router-dom";
-import SearchIcon from '@mui/icons-material/Search';
 import GridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
 import AdminMenu from "./adminMenu";
+import SecondImage from "../bckhome.jpg"
 
 const AdminNav = () => {
 
@@ -20,8 +20,10 @@ const AdminNav = () => {
 
     return (
         <div className="searchBarContainer">
+            <Link to="/TicketQueue">
+            <img className="f4f_img" src={FirstImage} alt="Forum4You"></img></Link>
             <Link to="/Home">
-            <img className="f4f_img" src={Image} alt="Forum4You"></img></Link>
+            <img className="bckhome" src={SecondImage} alt="Home"></img></Link>
             <div
             className="menu"
             onMouseEnter={handleMouseEnter}

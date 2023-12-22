@@ -95,6 +95,7 @@ const TicketDesc = () => {
     return (
         <div className="body">
             {isAdmin && <AdminNav />}
+            <div className="center_Front">
             <div className="postbox">
                 <h1>Ticket Description</h1>
                 <div>
@@ -134,6 +135,7 @@ const TicketDesc = () => {
                 )}
             </div>
         </div>
+    </div>
     );
 }
 

@@ -78,7 +78,8 @@ const BellNotification = () => {
         {notification.length > 0 ? <NotificationsActiveIcon /> : <NotificationsNoneIcon />}
       </button>
       {showMenu && (
-      <div className="dropdown-menu">
+    <div className='notification'>
+      <div className="dropdown-menu-notification">
         <ul>
           {notification.map((notification) => (
             <div key={notification.id}>
@@ -111,7 +112,7 @@ const BellNotification = () => {
             </div>
           ))}
         </ul>
-      </div>
+      </div></div>
       )}
     </div>
   );

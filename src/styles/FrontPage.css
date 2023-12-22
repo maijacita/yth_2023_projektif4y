@@ -23,6 +23,21 @@ body {
     border-radius: 20px;
   }
 
+  .postbox_btn{
+    cursor: pointer;
+    position: relative;
+    margin-left: 80%;
+    display: flex;
+    align-items: center;
+  }
+
+  .postbox_postEdit{
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
   .Information{
     flex-direction: column;
     justify-content: space-between;

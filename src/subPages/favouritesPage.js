@@ -3,11 +3,10 @@ import { Link, useParams } from "react-router-dom";
 import NavBar from "../components/navbar";
 import "../styles/ProfilePage.css"
 import Image from "../yf_logo.jpg"
-import { FAVOURITES, firestore, getDocs, getAuth, collection, query, where, POSTS, doc, getDoc } from '../Firebase'
+import { FAVOURITES, firestore, getDocs, collection, query, where, POSTS, doc, getDoc } from '../Firebase'
 
 const FavouritesPage = () => {
 
-    const auth = getAuth()
     const [favourite, setFavourite] = useState([])
     const [posts, setPosts] = useState([])
     const {userId} = useParams()
